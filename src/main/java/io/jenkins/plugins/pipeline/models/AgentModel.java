@@ -49,7 +49,11 @@ public class AgentModel extends AbstractModel implements ParsableModelInterface 
             groovyString.append(this.getDirectiveOpen());
             if (this.agentType.equals("kubernetes")) {
                 for (KeyValueModel keyValueModel : this.agentParameter) {
-                    if (keyValueModel.getKey().equals("yaml")) {
+                    if ((keyValueModel.getKey().equals("yaml")) && keyValueModel.getValue().startsWith("readFile(")) {
+                        groovyString.append(keyValueModel.getKey())
+                                .append(" ")
+                                .append(keyValueModel.getValue());
+                    } else if (keyValueModel.getKey().equals("yaml")) {
                         groovyString.append(keyValueModel.getKey())
                                 .append(" \"\"\"\n")
                                 .append(keyValueModel.getValue())
